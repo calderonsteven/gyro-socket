@@ -1,0 +1,39 @@
+<html>
+    <head>
+        <title>Gyro Socket</title>
+        <style>
+        
+        	#ball
+        	{
+        		width : 50px; 
+        		height : 50px; 
+        		background-color : #990000; 
+        		position : absolute; 
+        		-webkit-border-radius : 50px;
+        	}
+        </style>
+        <script src='//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js'></script>
+        <script src='/socket.io/socket.io.js'></script>
+        <script>
+        	//connect to the socket
+            var socket = io.connect('/');
+            
+            $(function(){
+            	//on update
+                socket.on('update', function(data){
+                    $('#ball').css('top', -1*data.beta*10 + 200);
+                    $('#ball').css('left', -1*data.gamma*10 + 200);
+                    console.log(data.beta, data.gamma);
+                });
+
+                window.ondeviceorientation = function(e){
+                	var data = { beta : e.beta, gamma: e.gamma };
+                    socket.emit('mobile_device_change', data);
+                };
+            });
+        </script>
+    </head>
+    <body>
+        <div id='ball'></div>
+    </body>
+</html>
