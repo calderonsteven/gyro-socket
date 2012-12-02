@@ -3,9 +3,15 @@ var express = require('express');
 var app = express.createServer(express.logger());
 var io = require('socket.io').listen(app);
 
+//app.use("/styles", express.static(__dirname + '/styles'));
+
 //Serve the index.html page when the default route is called
+app.get('/ball', function(request, response) {
+  response.sendfile(__dirname + '/ball.html');
+});
+
 app.get('/', function(request, response) {
-  response.sendfile(__dirname + '/index.html');
+  response.sendfile(__dirname + '/cubo.html');
 });
 
 // assuming io is the Socket.IO server object

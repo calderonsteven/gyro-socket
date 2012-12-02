@@ -20,14 +20,35 @@
             
             $(function(){
             	//on update
+                var firstAlfa, firstBeta, left = 500;
                 socket.on('update', function(data){
-                    $('#ball').css('top', -1*data.beta*10 + 200);
-                    $('#ball').css('left', -1*data.gamma*10 + 200);
-                    console.log(data.beta, data.gamma);
+                    if(!firstAlfa){ firstAlfa = data.alpha; }
+                    if(!firstBeta){ firstBeta = data.beta; }
+
+                    //if(data.beta >= 0){
+                        //$('#ball').css('top', -1*data.beta*10 + 200);    
+                    //    $('#ball').css('top', data.beta);    
+                    //}
+
+                    if(data.alpha <= firstAlfa || data.alpha <= left){
+                        //$('#ball').css('left', -1*data.alpha*10 + 200);    
+                        $('#ball').css('left', left+=1);    
+                    }
+
+                    if(data.alpha >= firstAlfa || data.alpha >= left){
+                        $('#ball').css('left', left-=1);    
+                    }
+                    
+                    //$('#ball').css('left', data.alpha);
+                    //console.log("alpha", data.alpha, "beta", data.beta, "gamma", data.gamma );
+                    console.log("alpha", Math.ceil(data.alpha), 
+                                "beta", Math.ceil(data.beta), 
+                                "gamma", Math.ceil(data).gamma );
+                    //console.log(firstAlfa, firstBeta);
                 });
 
                 window.ondeviceorientation = function(e){
-                	var data = { beta : e.beta, gamma: e.gamma };
+                	var data = { beta : e.beta, gamma: e.gamma, alpha: e.alpha };
                     socket.emit('mobile_device_change', data);
                 };
             });
